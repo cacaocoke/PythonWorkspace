@@ -111,7 +111,7 @@ while running:
     screen.blit(chrt, (chrt_x_pos,chrt_y_pos))
     screen.blit(enemy,(enemy_x_pos, enemy_y_pos))
 
-    pygame.display.update() # 게임화면을 다시 그리기 지속 리프레쉬
+    pygame.display.update()
 
 
 pygame.quit()
