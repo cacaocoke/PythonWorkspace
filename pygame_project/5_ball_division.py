@@ -182,6 +182,36 @@ while running:
             if weapon_rect.colliderect(ball_rect):
                 weapon_to_remove = weapon_idx # 해당 무기 없애기 위한 값 설정
                 ball_to_remove = ball_idx # 해당 공 없에기 위한 값 설정
+                
+                # 가장 작은 크기의 공이 아니라면 다음 단계의 공으로 나눠주기
+                if ball_img_idx < 3:
+                    # 현재 공 크기 정보를 가지고 옴
+                    ball_width = ball_rect.size[0]
+                    ball_height = ball_rect.size[1]
+
+                    # 나눠진 공 정보
+                    small_ball_rect = ball_images[ball_img_idx + 1].get_rect()
+                    small_ball_width = small_ball_rect.size[0]
+                    small_ball_height = small_ball_rect.size[1]
+
+                    # 왼쪽으로 튕겨나가는 작은 공
+                    balls.append({
+                        "pos_x" : ball_pos_x + (ball_width / 2) - (small_ball_width / 2),
+                        "pos_y" : ball_pos_y + (ball_height / 2) - (small_ball_height / 2),
+                        "img_idx" : ball_img_idx + 1,
+                        "to_x" : -3,
+                        "to_y" : -6,
+                        "init_spd_y" : ball_speed_y[ball_img_idx + 1]})
+
+                    # 오른쪽으로 튕겨나가는 작은 공
+                    balls.append({
+                        "pos_x" : ball_pos_x + (ball_width / 2) - (small_ball_width / 2),
+                        "pos_y" : ball_pos_y + (ball_height / 2) - (small_ball_height / 2),
+                        "img_idx" : ball_img_idx + 1,
+                        "to_x" : +3,
+                        "to_y" : -6,
+                        "init_spd_y" : ball_speed_y[ball_img_idx + 1]})   
+                    
                 break
 
     # 충돌된 공 or 무기 없애기
@@ -200,14 +230,14 @@ while running:
     for weapon_x_pos, weapon_y_pos in weapons:
         screen.blit(weapon,(weapon_x_pos, weapon_y_pos))
 
-    screen.blit(stage, (0,screen_height - stage_height))
-    screen.blit(character, (character_x_pos, character_y_pos))
-
     for idx, val in enumerate(balls):
         ball_pos_x = val["pos_x"]
         ball_pos_y = val["pos_y"]
         ball_img_idx = val["img_idx"]
         screen.blit(ball_images[ball_img_idx], (ball_pos_x, ball_pos_y))
+
+    screen.blit(stage, (0,screen_height - stage_height))
+    screen.blit(character, (character_x_pos, character_y_pos))
 
     pygame.display.update() # 게임화면을 다시 그리기 지속 리프레쉬
 
